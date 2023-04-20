@@ -1,8 +1,10 @@
 /* Initializing the main variables */
 let var1 = undefined;
 let var2 = undefined;
-// let prevAns = 0;
+let prevAns = undefined;
 let operator = undefined;
+let var1Dot = undefined;
+let var2Dot = undefined;
 
 function add(a, b) {
     return a + b;
@@ -44,6 +46,8 @@ function resetData(v1, v2, op) {
     var1 = v1;
     var2 = v2;
     operator = op;
+    var1Dot = undefined;
+    var2Dot = undefined;
 }
 
 function showAns(res) {
@@ -60,8 +64,12 @@ function buttonMap(e) {
                 var1 = operate(operator, var1, var2);
                 var2 = undefined;
             }
-            else if (var1 === undefined)
-                break;
+            else if (var1 === undefined) {
+                if(prevAns === undefined)
+                    break;
+                var1 = prevAns;
+                prevAns = undefined;
+            }
             operator = this.textContent;
             break;
         case 'number':
@@ -69,12 +77,20 @@ function buttonMap(e) {
                 if (var1 === undefined) var1 = 0;
                 var1 *= 10;
                 var1 += parseFloat(this.textContent);
+                if(var1Dot !== undefined) {
+                    var1Dot++;
+                    var1 /= Math.pow(10, var1Dot);
+                }
                 showAns(var1);
             }
             else {
                 if (var2 === undefined) var2 = 0;
                 var2 *= 10;
                 var2 += parseFloat(this.textContent);
+                if(var2Dot !== undefined) {
+                    var2Dot++;
+                    var2 /= Math.pow(10, var2Dot);
+                }
                 showAns(var2);
             }
             break;
@@ -83,12 +99,22 @@ function buttonMap(e) {
                 break;
             const res = operate(operator, var1, var2);
             showAns(res);
+            prevAns = res;
 
             resetData(undefined, undefined, undefined);
             break;
         case 'clear':
             showAns(0);
             resetData(undefined, undefined, undefined);
+            break;
+        case 'dot':
+            if(var2 !== undefined && var2Dot === undefined) {
+                var2Dot = 0;
+            }
+            if(var1 !== undefined && var1Dot === undefined) {
+                var1Dot = 0;
+            }
+            dispAns.textContent = `${dispAns.textContent}.`;
             break;
     }
 }
