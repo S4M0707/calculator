@@ -77,6 +77,7 @@ function buttonMap(e) {
             if (currentPos === undefined) {
                 if (prevAns === undefined)
                     break;
+
                 var1 = prevAns;
                 prevAns = undefined;
                 operator = this.textContent;
@@ -102,39 +103,50 @@ function buttonMap(e) {
 
             if (currentPos === undefined) {
 
-                var1 = parseFloat(this.textContent);
+                var1 = parseInt(this.textContent);
                 currentPos = 'var1';
                 dispAns.textContent = `${var1}`;
             }
 
             else if (currentPos === 'var1') {
 
-                var1 *= 10;
-                var1 += parseFloat(this.textContent);
-
                 if (var1Dot !== undefined) {
                     var1Dot++;
-                    var1 /= Math.pow(10, var1Dot);
+                    const power = Math.pow(10, var1Dot);
+                    var1 *= power;
+                    var1 += parseInt(this.textContent);
+                    var1 = Math.round(var1) / power;
                 }
+                else {
+                    var1 *= 10;
+                    var1 += parseInt(this.textContent);
+                }
+
                 currentPos = 'var1';
                 dispAns.textContent = `${var1}`;
             }
 
             else if (currentPos === 'operator') {
 
-                var2 = parseFloat(this.textContent);
+                var2 = parseInt(this.textContent);
                 currentPos = 'var2';
                 dispAns.textContent = `${var2}`;
             }
 
             else if (currentPos === 'var2') {
-                var2 *= 10;
-                var2 += parseFloat(this.textContent);
 
                 if (var2Dot !== undefined) {
                     var2Dot++;
-                    var2 /= Math.pow(10, var2Dot);
+                    const power = Math.pow(10, var2Dot);
+                    var2 *= power;
+                    var2 += parseInt(this.textContent);
+                    var2 = Math.round(var2) / power;
                 }
+                else {
+                    var2 *= 10;
+                    var2 += parseInt(this.textContent);
+                }
+
                 currentPos = 'var2';
                 dispAns.textContent = `${var2}`;
             }
@@ -161,7 +173,7 @@ function buttonMap(e) {
 
         case 'dot':
 
-            if(currentPos === undefined) {
+            if (currentPos === undefined) {
                 var1 = 0;
                 var1Dot = 0;
                 currentPos = 'var1';
@@ -173,7 +185,7 @@ function buttonMap(e) {
                 dispAns.textContent = `${dispAns.textContent}.`;
             }
 
-            else if(currentPos === 'operator') {
+            else if (currentPos === 'operator') {
                 var2 = 0;
                 var2Dot = 0;
                 currentPos = 'var2';
@@ -182,6 +194,62 @@ function buttonMap(e) {
             else if (currentPos === 'var2') {
                 if (var2Dot === undefined) var2Dot = 0;
                 dispAns.textContent = `0.`;
+            }
+
+            break;
+        case 'del':
+
+            if (currentPos === undefined) {
+                break;
+            }
+
+            else if (currentPos === 'var1') {
+
+                if (var1 === 0) {
+                    resetData();
+                    break;
+                }
+
+                if (var1Dot !== undefined) {
+                    var1 *= Math.pow(10, var1Dot);
+                    var1 = Math.floor(var1 / 10);
+                    var1Dot--;
+                    var1 /= Math.pow(10, var1Dot);
+                    if (var1Dot === 0) var1Dot = undefined;
+                }
+                else {
+                    var1 /= 10;
+                    var1 = Math.floor(var1);
+                }
+                dispAns.textContent = `${var1}`;
+            }
+
+            else if (currentPos === 'operator') {
+                operator = undefined;
+                currentPos = 'var1';
+            }
+
+            else if (currentPos === 'var2') {
+
+                if (var2 === 0) {
+                    var2 = undefined;
+                    var2Dot = undefined;
+                    currentPos = 'operator';
+                    break;
+                }
+
+                if (var2Dot !== undefined) {
+                    var2 *= Math.pow(10, var2Dot);
+                    var2 = Math.floor(var2 / 10);
+                    var2Dot--;
+                    var2 /= Math.pow(10, var2Dot);
+                    if (var2Dot === 0) var2Dot = undefined;
+                }
+                else {
+                    var2 /= 10;
+                    var2 = Math.floor(var2);
+                }
+                dispAns.textContent = `${var2}`;
             }
 
             break;
