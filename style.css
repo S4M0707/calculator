@@ -1,0 +1,102 @@
+body {
+    background-color: #222222;
+    color: #FFFFFF;
+    font-family: 'Open Sans', sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.header h1 {
+    font-size: 7vh;
+}
+
+.calcContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #888888;
+    height: 70vh;
+    width: 45vh;
+    border: 3px solid white;
+    border-radius: 20px;
+}
+
+.calcContainer .disp {
+    height: 25%;
+    width: 94%;
+    background-color: #222222;
+    margin: 3% 0;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-around;
+}
+
+.disp .equation {
+    color: #c2c0c0;
+    font-size: 25px;
+    margin-top: 5px;
+    margin-right: 25px;
+}
+
+.disp .ans {
+    font-size: 40px;
+    margin-bottom: 5px;
+    margin-right: 25px;
+}
+
+.keys {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 75%;
+    width: 95%;
+    margin: 0% 3% 3% 3%;
+}
+
+.keys .row {
+    display: flex;
+    justify-content: space-between;
+    width: 95%;
+    height: 18%;
+    align-items: center;
+}
+
+button {
+    height: 90%;
+    width: 23%;
+    transition: transform 0.3s ease;
+    border-radius: 10px;
+    border: 2px solid #222222;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+button:hover {
+    transform: scale(1.05);
+    border-color: blueviolet;
+}
+
+.clear {
+    background-color: rgb(221, 91, 91);
+    border: 2px solid red;
+}
+
+.equal {
+    background-color: rgb(70, 129, 70);
+    border: 2px solid green;
+}
