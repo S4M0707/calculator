@@ -5,116 +5,185 @@ let prevAns = undefined;
 let operator = undefined;
 let var1Dot = undefined;
 let var2Dot = undefined;
+let currentPos = undefined;
 
 function add(a, b) {
+
     return a + b;
 }
 
 function subtract(a, b) {
+
     return a - b;
 }
 
 function multiply(a, b) {
+
     return a * b;
 }
 
 function divide(a, b) {
+
     return a / b;
 }
 
 function operate(op, a, b) {
 
     let soln;
+
     switch (op) {
+
         case '+':
             soln = add(a, b);
             break;
+
         case '-':
             soln = subtract(a, b);
             break;
+
         case '*':
             soln = multiply(a, b);
             break;
+
         case '/':
             soln = divide(a, b);
             break;
+
     }
+
     return soln;
 }
 
-function resetData(v1, v2, op) {
-    var1 = v1;
-    var2 = v2;
-    operator = op;
+function resetData() {
+
+    var1 = undefined;
+    var2 = undefined;
+    operator = undefined;
     var1Dot = undefined;
     var2Dot = undefined;
-}
-
-function showAns(res) {
-    dispAns.textContent = `${res}`;
+    currentPos = undefined;
 }
 
 function buttonMap(e) {
+
     console.log(this);
+
     const buttonClass = this.className;
 
     switch (buttonClass) {
+
         case 'operator':
-            if (var2 !== undefined) {
-                var1 = operate(operator, var1, var2);
-                var2 = undefined;
-            }
-            else if (var1 === undefined) {
-                if(prevAns === undefined)
+
+            if (currentPos === undefined) {
+                if (prevAns === undefined)
                     break;
                 var1 = prevAns;
                 prevAns = undefined;
+                operator = this.textContent;
             }
-            operator = this.textContent;
+
+            else if (currentPos === 'var1') {
+                operator = this.textContent;
+                var1Dot = undefined;
+            }
+
+            // else if (currentPos === 'operator')
+
+            else if (currentPos === 'var2') {
+                var1 = operate(operator, var1, var2);
+                var2 = undefined;
+                var2Dot = undefined;
+            }
+
+            currentPos = 'operator';
             break;
+
         case 'number':
-            if (operator === undefined) {
-                if (var1 === undefined) var1 = 0;
+
+            if (currentPos === undefined) {
+
+                var1 = parseFloat(this.textContent);
+                currentPos = 'var1';
+                dispAns.textContent = `${var1}`;
+            }
+
+            else if (currentPos === 'var1') {
+
                 var1 *= 10;
                 var1 += parseFloat(this.textContent);
-                if(var1Dot !== undefined) {
+
+                if (var1Dot !== undefined) {
                     var1Dot++;
                     var1 /= Math.pow(10, var1Dot);
                 }
-                showAns(var1);
+                currentPos = 'var1';
+                dispAns.textContent = `${var1}`;
             }
-            else {
-                if (var2 === undefined) var2 = 0;
+
+            else if (currentPos === 'operator') {
+
+                var2 = parseFloat(this.textContent);
+                currentPos = 'var2';
+                dispAns.textContent = `${var2}`;
+            }
+
+            else if (currentPos === 'var2') {
                 var2 *= 10;
                 var2 += parseFloat(this.textContent);
-                if(var2Dot !== undefined) {
+
+                if (var2Dot !== undefined) {
                     var2Dot++;
                     var2 /= Math.pow(10, var2Dot);
                 }
-                showAns(var2);
+                currentPos = 'var2';
+                dispAns.textContent = `${var2}`;
             }
-            break;
-        case 'equal':
-            if (operator === undefined || var1 === undefined || var2 === undefined)
-                break;
-            const res = operate(operator, var1, var2);
-            showAns(res);
-            prevAns = res;
 
-            resetData(undefined, undefined, undefined);
             break;
+
+        case 'equal':
+
+            if (currentPos != 'var2')
+                break;
+
+            const res = operate(operator, var1, var2);
+            prevAns = res;
+            dispAns.textContent = `${res}`;
+
+            resetData();
+            break;
+
         case 'clear':
-            showAns(0);
-            resetData(undefined, undefined, undefined);
+
+            dispAns.textContent = `${0}`;
+            resetData();
             break;
+
         case 'dot':
-            if(var2 !== undefined && var2Dot === undefined) {
-                var2Dot = 0;
-            }
-            if(var1 !== undefined && var1Dot === undefined) {
+
+            if(currentPos === undefined) {
+                var1 = 0;
                 var1Dot = 0;
+                currentPos = 'var1';
+                dispAns.textContent = `0.`;
             }
-            dispAns.textContent = `${dispAns.textContent}.`;
+
+            else if (currentPos === 'var1') {
+                if (var1Dot === undefined) var1Dot = 0;
+                dispAns.textContent = `${dispAns.textContent}.`;
+            }
+
+            else if(currentPos === 'operator') {
+                var2 = 0;
+                var2Dot = 0;
+                currentPos = 'var2';
+            }
+
+            else if (currentPos === 'var2') {
+                if (var2Dot === undefined) var2Dot = 0;
+                dispAns.textContent = `0.`;
+            }
+
             break;
     }
 }
