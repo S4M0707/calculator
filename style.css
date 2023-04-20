@@ -83,7 +83,7 @@ button {
     border-radius: 10px;
     border: 2px solid #222222;
     font-weight: bold;
-    font-size: 15px;
+    font-size: 20px;
 }
 
 button:hover {
@@ -94,6 +94,13 @@ button:hover {
 .clear {
     background-color: rgb(221, 91, 91);
     border: 2px solid red;
+    font-size: 15px;
+}
+
+.del {
+    background-color: rgb(230, 64, 180);
+    border: 2px solid rgb(123, 33, 95);
+    font-size: 15px;
 }
 
 .equal {

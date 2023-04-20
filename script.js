@@ -41,17 +41,30 @@ function operate(op, a, b) {
             soln = subtract(a, b);
             break;
 
-        case '*':
+        case '×':
             soln = multiply(a, b);
             break;
 
-        case '/':
+        case '÷':
             soln = divide(a, b);
             break;
 
     }
 
     return soln;
+}
+
+function showEquation() {
+    if(currentPos === undefined) return;
+
+    if(currentPos === 'var1')
+        dispEquation.textContent = `${var1}`;
+
+    else if(currentPos === 'operator')
+        dispEquation.textContent = `${var1} ${operator}`;
+    
+    else if(currentPos === 'var2')
+        dispEquation.textContent = `${var1} ${operator} ${var2}`;
 }
 
 function resetData() {
@@ -168,6 +181,7 @@ function buttonMap(e) {
         case 'clear':
 
             dispAns.textContent = `${0}`;
+            dispEquation.textContent = '...';
             resetData();
             break;
 
@@ -254,6 +268,8 @@ function buttonMap(e) {
 
             break;
     }
+
+    showEquation();
 }
 
 const buttons = document.querySelectorAll('button');
@@ -262,3 +278,4 @@ buttons.forEach((button) => {
 });
 
 const dispAns = document.querySelector('.disp .ans');
+const dispEquation = document.querySelector('.disp .equation');
