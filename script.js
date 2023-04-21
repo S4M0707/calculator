@@ -1,11 +1,11 @@
 /* Initializing the main variables */
 let var1 = undefined;
 let var2 = undefined;
-let prevAns = undefined;
 let operator = undefined;
 let var1Dot = undefined;
 let var2Dot = undefined;
 let currentPos = undefined;
+let prevAns = undefined;
 
 function add(a, b) {
 
@@ -55,15 +55,15 @@ function operate(op, a, b) {
 }
 
 function showEquation() {
-    if(currentPos === undefined) return;
+    if (currentPos === undefined) return;
 
-    if(currentPos === 'var1')
+    if (currentPos === 'var1')
         dispEquation.textContent = `${var1}`;
 
-    else if(currentPos === 'operator')
+    else if (currentPos === 'operator')
         dispEquation.textContent = `${var1} ${operator}`;
-    
-    else if(currentPos === 'var2')
+
+    else if (currentPos === 'var2')
         dispEquation.textContent = `${var1} ${operator} ${var2}`;
 }
 
@@ -77,12 +77,10 @@ function resetData() {
     currentPos = undefined;
 }
 
-function buttonMap(e) {
+function buttonMap(button) {
 
-    console.log(this);
-
-    const buttonClass = this.className;
-
+    // console.log(button);
+    const buttonClass = button.className;
     switch (buttonClass) {
 
         case 'operator':
@@ -93,11 +91,11 @@ function buttonMap(e) {
 
                 var1 = prevAns;
                 prevAns = undefined;
-                operator = this.textContent;
+                operator = button.textContent;
             }
 
             else if (currentPos === 'var1') {
-                operator = this.textContent;
+                operator = button.textContent;
                 var1Dot = undefined;
             }
 
@@ -107,6 +105,7 @@ function buttonMap(e) {
                 var1 = operate(operator, var1, var2);
                 var2 = undefined;
                 var2Dot = undefined;
+                dispAns.textContent = `${var1}`;
             }
 
             currentPos = 'operator';
@@ -116,7 +115,7 @@ function buttonMap(e) {
 
             if (currentPos === undefined) {
 
-                var1 = parseInt(this.textContent);
+                var1 = parseInt(button.textContent);
                 currentPos = 'var1';
                 dispAns.textContent = `${var1}`;
             }
@@ -127,12 +126,12 @@ function buttonMap(e) {
                     var1Dot++;
                     const power = Math.pow(10, var1Dot);
                     var1 *= power;
-                    var1 += parseInt(this.textContent);
+                    var1 += parseInt(button.textContent);
                     var1 = Math.round(var1) / power;
                 }
                 else {
                     var1 *= 10;
-                    var1 += parseInt(this.textContent);
+                    var1 += parseInt(button.textContent);
                 }
 
                 currentPos = 'var1';
@@ -141,7 +140,7 @@ function buttonMap(e) {
 
             else if (currentPos === 'operator') {
 
-                var2 = parseInt(this.textContent);
+                var2 = parseInt(button.textContent);
                 currentPos = 'var2';
                 dispAns.textContent = `${var2}`;
             }
@@ -152,12 +151,12 @@ function buttonMap(e) {
                     var2Dot++;
                     const power = Math.pow(10, var2Dot);
                     var2 *= power;
-                    var2 += parseInt(this.textContent);
+                    var2 += parseInt(button.textContent);
                     var2 = Math.round(var2) / power;
                 }
                 else {
                     var2 *= 10;
-                    var2 += parseInt(this.textContent);
+                    var2 += parseInt(button.textContent);
                 }
 
                 currentPos = 'var2';
@@ -209,8 +208,8 @@ function buttonMap(e) {
                 if (var2Dot === undefined) var2Dot = 0;
                 dispAns.textContent = `0.`;
             }
-
             break;
+
         case 'del':
 
             if (currentPos === undefined) {
@@ -274,7 +273,15 @@ function buttonMap(e) {
 
 const buttons = document.querySelectorAll('button');
 buttons.forEach((button) => {
-    button.addEventListener('click', buttonMap);
+    button.addEventListener('click', (event) => {
+        buttonMap(event.target);
+    });
+});
+window.addEventListener('keydown', (event) => {
+    event.preventDefault();
+    const btn = document.querySelector(`button[key="${event.key}"]`)
+    if(btn !== null)
+        buttonMap(btn);
 });
 
 const dispAns = document.querySelector('.disp .ans');
